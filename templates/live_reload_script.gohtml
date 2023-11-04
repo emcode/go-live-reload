@@ -1,0 +1,43 @@
+{{define "live_reload_script"}}
+    <script>
+
+        let createEventSource = (onMessage) => {
+            const es = new EventSource("/live-reload");
+            es.onmessage = (messageEvent) => {
+                if (messageEvent.data) {
+                    onMessage(
+                        String(messageEvent.data)
+                    );
+                }
+            }
+            es.onerror = () => {
+                es.close();
+                onClosed();
+            }
+            return es;
+        }
+
+        let versionToken = null;
+        let es = null;
+
+        let onMessage = (token) => {
+            if (null === versionToken) {
+                versionToken = token;
+            } else if (versionToken !== token) {
+                if (es && es.readyState !== EventSource.CLOSED) {
+                    es.close();
+                }
+                location.reload();
+            }
+        }
+
+        let onClosed = () => {
+            setTimeout(() => {
+              es = createEventSource(onMessage, onClosed);
+            }, 50);
+        }
+
+        es = createEventSource(onMessage, onClosed);
+
+    </script>
+{{end}}

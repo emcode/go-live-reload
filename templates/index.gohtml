@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Go live-reload example</title>
+</head>
+<body>
+    <h1>This is index page</h1>
+    <p>
+        It will be auto reloaded after every modification of the source.<br />
+        Go to <code>.justfile</code> and read the source code to learn
+        how it works.
+    </p>
+    {{template "live_reload_script"}}
+</body>
+</html>
